@@ -408,9 +408,14 @@ public class BeaconsAndroidModule extends ReactContextBaseJavaModule implements 
    * Utils
    **********************************************************************************************/
   private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
-      reactContext
+      try {
+          reactContext
               .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
               .emit(eventName, params);
+
+      } catch (Exception e) {
+          Log.i(LOG_TAG, "Tried to send event to react native before it was fully initialized");
+      }
   }
 
   private Region createRegion(String regionId, String beaconUuid) {
